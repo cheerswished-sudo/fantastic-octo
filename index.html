@@ -1,0 +1,53 @@
+أكيد! غيرت العنوان لـ"MAYKOLES - آخر أخبار ليونيل ميسي":
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MAYKOLES - آخر أخبار ليونيل ميسي</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    h1 { text-align: center; color: #2c3e50; }
+    #news { max-width: 600px; margin: auto; background: white; padding: 15px; border-radius: 8px; }.article { border-bottom: 1px solid #ddd; padding: 10px 0; }.title { font-weight: bold; color: #2980b9; }.date { font-size: 0.85em; color: #666; }
+  </style>
+</head>
+<body>
+
+<h1>MAYKOLES - آخر أخبار ليونيل ميسي</h1>
+<div id="news">جارٍ تحميل الأخبار...</div>
+
+<script>
+  async function fetchMessiNews() {
+    try {
+      const res = await fetch('https://footballnewsapi.netlify.app/.netlify/functions/api/news/goal');
+      const data = await res.json();
+      const newsDiv = document.getElementById('news');
+      newsDiv.innerHTML = '';
+      const messiNews = data.articles.filter(a => /messi|ليونيل ميسي/i.test(a.title));
+      if (messiNews.length === 0) {
+        newsDiv.innerHTML = 'لا توجد أخبار حديثة عن ميسي حالياً.';
+        return;
+      }
+      messiNews.forEach(article => {
+        const articleDiv = document.createElement('div');
+        articleDiv.className = 'article';
+        articleDiv.innerHTML = `
+          <div class="title">${article.title}</div>
+          <div class="date">${new Date(article.publishedAt).toLocaleString()}</div>
+          <p>${article.description || ''}</p>
+        `;
+        newsDiv.appendChild(articleDiv);
+      });
+    } catch (err) {
+      document.getElementById('news').innerText = 'فشل تحميل الأخبار. حاول لاحقاً.';
+    }
+  }
+
+  fetchMessiNews();
+  setInterval(fetchMessiNews, 60000);
+</script>
+
+</body>
+</html>
+```
+add home page
